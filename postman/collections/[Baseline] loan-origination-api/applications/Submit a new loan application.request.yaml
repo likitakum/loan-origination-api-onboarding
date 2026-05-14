@@ -1,0 +1,79 @@
+type: http
+name: Submit a new loan application
+url: '{{baseUrl}}/applications'
+method: POST
+headers:
+  - key: Content-Type
+    value: application/json
+  - key: Accept
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "applicantId": "app_9876543210",
+      "productType": "personal_loan",
+      "requestedAmount": 25000,
+      "termMonths": 36,
+      "purpose": "debt_consolidation",
+      "annualIncome": 85000,
+      "employmentStatus": "full_time"
+    }
+examples:
+  - response:
+      statusCode: 201
+      statusText: Created
+      body:
+        type: json
+        content: |-
+          {
+            "id": "string",
+            "applicantId": "string",
+            "productType": "string",
+            "requestedAmount": 7486.643394538586,
+            "termMonths": 6252,
+            "status": "under_review",
+            "createdAt": "2024-09-21T19:01:02.628Z",
+            "updatedAt": "2007-12-08T03:50:27.190Z",
+            "underwritingResult": {
+              "applicationId": "string",
+              "status": "failed",
+              "decision": "approved",
+              "riskScore": 35,
+              "evaluatedAt": "1979-08-24T14:16:03.692Z"
+            }
+          }
+      headers:
+        - key: Content-Type
+          value: application/json
+    name: Application created successfully
+  - response:
+      statusCode: 400
+      statusText: Bad Request
+      body:
+        type: json
+        content: |-
+          {
+            "code": "string",
+            "message": "string",
+            "details": {}
+          }
+      headers:
+        - key: Content-Type
+          value: application/json
+    name: Invalid application data
+  - response:
+      statusCode: 409
+      statusText: Conflict
+      body:
+        type: json
+        content: |-
+          {
+            "code": "string",
+            "message": "string",
+            "details": {}
+          }
+      headers:
+        - key: Content-Type
+          value: application/json
+    name: Duplicate active application exists
