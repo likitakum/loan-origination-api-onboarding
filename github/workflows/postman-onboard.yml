@@ -1,0 +1,36 @@
+name: Postman API Onboarding
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_name:
+        description: Service project name
+        required: true
+        default: loan-origination-api
+      spec_url:
+        description: Raw HTTPS URL for the OpenAPI spec
+        required: true
+        default: https://raw.githubusercontent.com/likitakum/loan-origination-api-onboarding/main/specs/loan-origination-api-openapi.yaml
+
+permissions:
+  actions: write
+  contents: write
+
+jobs:
+  onboarding:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: postman-cs/postman-api-onboarding-action@v0
+        with:
+          project-name: ${{ github.event.inputs.project_name }}
+          domain: lending
+          domain-code: LND
+          spec-url: ${{ github.event.inputs.spec_url }}
+          environments-json: '["prod","stage"]'
+          env-runtime-urls-json: '{"prod":"https://api.lending.example.com","stage":"https://stage.lending.example.com"}'
+          generate-ci-workflow: 'false'
+          postman-api-key: ${{ secrets.POSTMAN_API_KEY }}
+          postman-access-token: ${{ secrets.POSTMAN_ACCESS_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
